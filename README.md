@@ -105,3 +105,11 @@ Se recomienda parar la aplicación pulsando la combinación de teclas CTRL+C en 
 
 A pesar de que los test unitarios se ejecutan en el momento de ejecutar el comando `./gradlew build`, también se pueden 
 ejecutar mediante el comando `./gradlew cleanTest test`.
+
+docker run -it  \
+--mount source=myvol,target=/var/lib/mysql \
+-p3306:3306 \
+-p5672:5672 \
+-p15672:15672 \
+-p8081:8081 \
+albertomurrodrigo/mdas-web-alberto_mur:latest
