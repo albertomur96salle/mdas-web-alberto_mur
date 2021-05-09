@@ -24,6 +24,15 @@ public class RabbitMqEventManager implements EventManager {
         try {
             connection = factory.newConnection();
             this.channel = connection.createChannel();
+            this.channel.exchangeDeclare("pokemon", "direct");
+            this.channel.queueDeclare(
+                "newFavourites",
+                true,
+                false,
+                false,
+                null
+            );
+            this.channel.queueBind("newFavourites", "pokemon", "newFavourite");
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();
         }

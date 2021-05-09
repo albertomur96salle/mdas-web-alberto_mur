@@ -35,6 +35,13 @@ public class NewFavouritePokemonListener {
         try {
             connection = factory.newConnection();
             channel = connection.createChannel();
+            channel.queueDeclare(
+                    "newFavourites",
+                    true,
+                    false,
+                    false,
+                    null
+            );
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "UTF-8");
