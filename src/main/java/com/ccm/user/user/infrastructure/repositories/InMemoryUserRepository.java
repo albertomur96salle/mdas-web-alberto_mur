@@ -1,4 +1,4 @@
-package com.ccm.user.user.infrastructure;
+package com.ccm.user.user.infrastructure.repositories;
 
 import com.ccm.user.user.domain.aggregate.User;
 import com.ccm.user.user.domain.vo.UserId;

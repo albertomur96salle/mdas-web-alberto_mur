@@ -1,4 +1,4 @@
-package com.ccm.user.user.infrastructure;
+package com.ccm.user.user.infrastructure.controllers;
 
 import com.ccm.user.user.application.usecases.AddFavouritePokemonUseCase;
 import com.ccm.user.user.application.usecases.AddUserUseCase;

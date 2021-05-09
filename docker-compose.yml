@@ -7,7 +7,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: app_db
-      MYSQL_USER: root
       MYSQL_PASSWORD: my-secret-pw
     ports:
       - "3306:3306"
@@ -17,26 +16,21 @@ services:
       mynetwork:
         ipv4_address: 172.0.0.2
   rabbitmq:
-    image: rabbitmq:management
+    image: albertomurrodrigo/mdas-web-alberto_mur_rabbitmq
     container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbittdata:/var/lib/rabbitmq/
+      - rabbitlogs:/var/log/rabbitmq/
     networks:
       mynetwork:
         ipv4_address: 172.0.0.3
-  app:
-    image: albertomurrodrigo/mdas-web-alberto_mur
-    stdin_open: true
-    tty: true
-    container_name: app
-    ports:
-      - "8081:8081"
-    networks:
-      mynetwork:
-        ipv4_address: 172.0.0.4
 volumes:
   dbdata:
+  rabbittdata:
+  rabbitlogs:
 networks:
   mynetwork:
     driver: "bridge"

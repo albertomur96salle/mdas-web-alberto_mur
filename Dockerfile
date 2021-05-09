@@ -27,7 +27,4 @@ EXPOSE 8081
 ADD build/lib/* /deployments/lib/
 ADD build/*-runner.jar /deployments/app.jar
 
-RUN chown 1001 /deployments/setup.sh \
-    && chmod 540 /deployments/setup.sh
-
 ENTRYPOINT ["/deployments/run-java.sh"]

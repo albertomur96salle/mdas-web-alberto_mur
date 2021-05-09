@@ -1,4 +1,4 @@
-package com.ccm.user.user.infrastructure;
+package com.ccm.user.user.infrastructure.controllers;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.http.HttpStatus;
@@ -83,15 +83,4 @@ public class UserControllerTest {
             .assertThat()
             .statusCode(HttpStatus.SC_FORBIDDEN);
     }
-
-//    @Test
-//    public void shouldGetHttpCode500WhenAddingANewFavouritePokemon() {
-//        given()
-//            .header("id", "1")
-//            .queryParam("id", 123)
-//            .get("/user/addFavouritePokemon")
-//            .then()
-//            .assertThat()
-//            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-//    }
 }

@@ -1,12 +1,11 @@
 package com.ccm.user.user.domain.services;
 
 import com.ccm.user.user.domain.aggregate.User;
-import com.ccm.user.user.domain.exceptions.UserAlreadyExistsException;
 import com.ccm.user.user.domain.exceptions.UserNotFoundException;
 import com.ccm.user.user.domain.interfaces.UserRepository;
 import com.ccm.user.user.domain.vo.UserId;
 import com.ccm.user.user.domain.vo.UserName;
-import com.ccm.user.user.infrastructure.InMemoryUserRepository;
+import com.ccm.user.user.infrastructure.repositories.InMemoryUserRepository;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

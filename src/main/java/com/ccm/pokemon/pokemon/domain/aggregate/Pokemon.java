@@ -6,10 +6,11 @@ import java.util.Objects;
 
 public class Pokemon {
 
-    public Pokemon(Name name, PokemonId pokemonId) {
+    public Pokemon(PokemonId pokemonId, Name name) {
         this.name = name;
         this.pokemonId = pokemonId;
         this.pokemonTypes = new PokemonTypes();
+        this.favouriteCounter = new FavouriteCounter(0);
     }
 
     public Name getName() {
@@ -24,6 +25,10 @@ public class Pokemon {
         return pokemonTypes;
     }
 
+    public FavouriteCounter getFavouriteCounter() {
+        return favouriteCounter;
+    }
+
     private Name name;
     private PokemonId pokemonId;
     private PokemonTypes pokemonTypes;
@@ -32,12 +37,15 @@ public class Pokemon {
     public void addPokemonType(PokemonType pokemonType) {
         this.pokemonTypes.addType(pokemonType);
     }
+    public void incrementCounter() {
+        this.favouriteCounter.incrementCounter();
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return name.equals(pokemon.name) && pokemonId.equals(pokemon.pokemonId) && pokemonTypes.equals(pokemon.pokemonTypes);
+        return name.equals(pokemon.name) && pokemonId.equals(pokemon.pokemonId) && pokemonTypes.equals(pokemon.pokemonTypes) && favouriteCounter.equals(pokemon.favouriteCounter);
     }
 }

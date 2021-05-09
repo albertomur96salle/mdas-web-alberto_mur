@@ -15,8 +15,8 @@ public class JsonToPokemonParser {
         JSONArray typesJson = (JSONArray) pokemonResponse.get("types");
 
         Pokemon pokemon = new Pokemon(
-                new Name((String) pokemonResponse.get("name")),
-                new PokemonId(((Long) pokemonResponse.get("id")).intValue())
+            new PokemonId(((Long) pokemonResponse.get("id")).intValue()),
+            new Name((String) pokemonResponse.get("name"))
         );
         for (int i = 0; i < typesJson.size(); i++) {
             PokemonType type = new PokemonType((String) ((JSONObject) ((JSONObject) typesJson.get(i)).get("type")).get("name"));

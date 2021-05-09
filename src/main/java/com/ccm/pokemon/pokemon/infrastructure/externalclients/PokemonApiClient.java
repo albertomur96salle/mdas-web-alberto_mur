@@ -1,11 +1,11 @@
-package com.ccm.pokemon.pokemon.infrastructure.repositories;
+package com.ccm.pokemon.pokemon.infrastructure.externalclients;
 
 import com.ccm.pokemon.pokemon.domain.aggregate.Pokemon;
 import com.ccm.pokemon.pokemon.domain.exceptions.NetworkConnectionException;
 import com.ccm.pokemon.pokemon.domain.exceptions.TimeoutException;
 import com.ccm.pokemon.pokemon.domain.exceptions.UnknownException;
-import com.ccm.pokemon.pokemon.domain.interfaces.PokemonRepository;
 import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonId;
+import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonType;
 import com.ccm.pokemon.pokemon.infrastructure.parsers.JsonToPokemonParser;
 import com.ccm.pokemon.pokemon.domain.exceptions.PokemonNotFoundException;
 import org.apache.http.HttpEntity;
@@ -16,6 +16,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -27,16 +28,12 @@ import java.net.UnknownHostException;
 
 @ApplicationScoped
 @Named("HttpPokemon")
-public class HttpPokemonRepository implements PokemonRepository {
+public class PokemonApiClient {
 
     private static final String HOST_ENDPOINT = "https://pokeapi.co/api/v2/pokemon/";
     private static final double TIMEOUT = 3;
 
-    @Inject
-    JsonToPokemonParser jsonToPokemonParser;
-
-    @Override
-    public Pokemon find(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, NetworkConnectionException, UnknownException {
+    public JSONObject find(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, NetworkConnectionException, UnknownException {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet(HOST_ENDPOINT + pokemonId.getPokemonId());
         RequestConfig.Builder requestConfig = RequestConfig.custom();
@@ -56,7 +53,8 @@ public class HttpPokemonRepository implements PokemonRepository {
             }
 
             JSONObject pokemonResponse = (JSONObject) parser.parse(str);
-            return jsonToPokemonParser.castJsonToPokemon(pokemonResponse);
+
+            return pokemonResponse;
         } catch (ConnectTimeoutException | SocketTimeoutException e) {
             throw new TimeoutException("Timeout period expired. Response took too long to arrive");
         } catch (UnknownHostException e) {

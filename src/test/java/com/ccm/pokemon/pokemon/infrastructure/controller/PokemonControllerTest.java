@@ -1,4 +1,4 @@
-package com.ccm.pokemon.pokemon.infrastructure;
+package com.ccm.pokemon.pokemon.infrastructure.controller;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.Response;

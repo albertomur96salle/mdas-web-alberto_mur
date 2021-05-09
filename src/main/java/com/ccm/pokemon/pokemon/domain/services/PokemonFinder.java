@@ -15,7 +15,7 @@ import javax.inject.Named;
 @ApplicationScoped
 public class PokemonFinder {
     @Inject
-    @Named("HttpPokemon")
+    @Named("MySQL")
     PokemonRepository pokemonRepository;
 
     public Pokemon findPokemon(PokemonId pokemonId) throws PokemonNotFoundException, NetworkConnectionException, TimeoutException, UnknownException {

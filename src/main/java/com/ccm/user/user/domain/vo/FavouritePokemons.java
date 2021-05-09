@@ -19,6 +19,7 @@ public class FavouritePokemons {
 
     public void addFavouritePokemonToList(FavouritePokemon pokemon) throws FavouritePokemonAlreadyExistsException {
         existsGuard(pokemon);
+
         favouritePokemonList.add(pokemon);
     }
 
