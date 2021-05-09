@@ -16,7 +16,7 @@ services:
       mynetwork:
         ipv4_address: 172.0.0.2
   rabbitmq:
-    image: albertomurrodrigo/mdas-web-alberto_mur_rabbitmq
+    image: rabbitmq:management
     container_name: rabbitmq
     ports:
       - "5672:5672"

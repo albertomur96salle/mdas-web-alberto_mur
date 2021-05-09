@@ -12,4 +12,6 @@ public interface PokemonRepository {
     public Pokemon find(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, NetworkConnectionException, UnknownException;
 
     public void save(Pokemon pokemon);
+
+    public void delete(PokemonId pokemonId);
 }

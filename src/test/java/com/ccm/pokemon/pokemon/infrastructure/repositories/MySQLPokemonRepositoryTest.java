@@ -75,5 +75,6 @@ public class MySQLPokemonRepositoryTest {
 
         //Then
         assertEquals(pokemonRepository.find(toBeSavedPokemon.getPokemonId()), toBeSavedPokemon);
+        pokemonRepository.delete(toBeSavedPokemon.getPokemonId());
     }
 }

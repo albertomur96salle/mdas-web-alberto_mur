@@ -3,10 +3,12 @@ package com.ccm.user.user.infrastructure.controllers;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTest {
 
     @Test

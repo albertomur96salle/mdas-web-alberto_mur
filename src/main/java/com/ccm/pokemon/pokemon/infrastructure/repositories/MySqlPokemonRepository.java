@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 @ApplicationScoped
 @Named("MySQL")
 public class MySqlPokemonRepository implements PokemonRepository {
-    private static SessionFactory factory;
+    public static SessionFactory factory;
     private Logger logger = Logger.getLogger(MySqlPokemonRepository.class.getName());
 
     @Inject
@@ -87,6 +87,26 @@ public class MySqlPokemonRepository implements PokemonRepository {
         try {
             tx = session.beginTransaction();
             session.saveOrUpdate(pokemonDB);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void delete(PokemonId pokemonId) {
+        Session session = factory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+
+            PokemonDB pokemon = session.load(PokemonDB.class, pokemonId.getPokemonId());
+            session.delete(pokemon);
+
             tx.commit();
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
