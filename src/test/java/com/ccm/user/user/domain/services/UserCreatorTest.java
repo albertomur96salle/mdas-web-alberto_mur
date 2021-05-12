@@ -31,10 +31,7 @@ public class UserCreatorTest {
 
     @BeforeAll
     public static void setUp() {
-        user = new User(
-                new UserName("keko"),
-                new UserId(1)
-        );
+        user = UserMother.random();
     }
 
     @BeforeEach

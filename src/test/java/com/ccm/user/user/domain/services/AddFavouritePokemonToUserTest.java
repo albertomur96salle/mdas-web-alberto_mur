@@ -36,8 +36,8 @@ public class AddFavouritePokemonToUserTest {
 
     @BeforeAll
     public static void setUp() {
-        userId = new UserId(1);
-        userName = new UserName("keko");
+        userId = UserIdMother.random();
+        userName = UserNameMother.random();
         user = Mockito.mock(User.class);
         favouritePokemonId = new FavouritePokemonId(123);
     }

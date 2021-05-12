@@ -1,11 +1,9 @@
 package com.ccm.pokemon.pokemon.infrastructure.parsers;
 
 import com.ccm.pokemon.pokemon.domain.aggregate.Pokemon;
-import com.ccm.pokemon.pokemon.domain.valueObjects.Name;
-import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonId;
+import com.ccm.pokemon.pokemon.domain.services.PokemonMother;
 import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonType;
 import io.quarkus.test.junit.QuarkusTest;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,16 +17,13 @@ public class PokemonToJsonParserTest {
 
     @Test
     public void shouldParsePokemontoPokemon() {
-        Pokemon pokemon = new Pokemon(
-            new PokemonId(1),
-            new Name("bulbasaur")
-        );
+        Pokemon pokemon = PokemonMother.random();
         pokemon.addPokemonType(new PokemonType("grass"));
         pokemon.addPokemonType(new PokemonType("poison"));
 
         JSONObject jsonPokemon = new JSONObject();
-        jsonPokemon.put("id", ((Integer) 1).longValue());
-        jsonPokemon.put("name", "bulbasaur");
+        jsonPokemon.put("id", ((Integer) pokemon.getPokemonId().getPokemonId()).longValue());
+        jsonPokemon.put("name", pokemon.getName().getName());
         jsonPokemon.put("types", "grass, poison");
         jsonPokemon.put("favouriteCounter", 0);
 

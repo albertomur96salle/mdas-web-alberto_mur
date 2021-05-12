@@ -14,8 +14,8 @@
    Esto pondrá en marcha la infraestructura necesaria para el proyecto 
 2) En otra terminal distinta ejecutar `docker-compose -f docker-compose-app.yml up`.   
    Esto pondrá en marcha el proyecto completo
-    Los diferentes servicios que se ponen en marcha dejan la terminal ocupada con la salida que van mostrando, por eso es
-    mejor tener dos terminales abiertas antes de empezar
+   Los diferentes servicios que se ponen en marcha dejan la terminal ocupada con la salida que van mostrando, por eso es
+   mejor tener dos terminales abiertas antes de empezar
 
 ## Parar el proyecto
 
@@ -37,5 +37,17 @@ Se describe a continuación un flujo de ejecución para probar la aplicación:
 
 ## Ejecutar los test
 
-A pesar de que los test (todos) se ejecutan en el momento de ejecutar el comando `./gradlew build`, también se pueden
-ejecutar mediante el comando `./gradlew cleanTest test`.
+Si se desea ejecutar los test unitarios, ejecutar por separado estos comandos (no importa el orden):
+
+* `./gradlew cleanTest test --tests 'com.ccm.pokemon.pokemon.application.usecases*'`
+* `./gradlew cleanTest test --tests 'com.ccm.pokemon.pokemon.domain.services*'`  
+* `./gradlew cleanTest test --tests 'com.ccm.user.user.application.usecases*'`  
+* `./gradlew cleanTest test --tests 'com.ccm.user.user.domain.services*'`
+
+Si se desea ejecutar los test de aceptación e integración (es imprescindible que la base de datos y RabbitMQ estén
+en marcha), ejecutar por separado estos comandos (no importa el orden):
+
+* `./gradlew cleanTest test --tests 'com.ccm.user.user.infrastructure*'`  
+* `./gradlew cleanTest test --tests 'com.ccm.pokemon.pokemon.infrastructure*'`  
+* `./gradlew cleanTest test --tests 'com.ccm.integration*'`
+

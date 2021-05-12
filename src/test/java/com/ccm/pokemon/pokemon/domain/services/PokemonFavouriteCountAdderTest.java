@@ -25,13 +25,11 @@ public class PokemonFavouriteCountAdderTest {
     PokemonFavouriteCountAdder pokemonFavouriteCountAdder;
 
     static Pokemon pokemon;
-    static PokemonId pokemonId;
     static PokemonRepository pokemonRepository;
 
     @BeforeEach
     public void setUp() {
-        pokemon = Mockito.mock(Pokemon.class);
-        pokemonId = Mockito.mock(PokemonId.class);
+        pokemon = PokemonMother.random();
         pokemonRepository = Mockito.mock(MySqlPokemonRepository.class);
         QuarkusMock.installMockForType(pokemonRepository, PokemonRepository.class);
     }
@@ -50,8 +48,8 @@ public class PokemonFavouriteCountAdderTest {
 
     @Test
     public void shouldThrowPokemonNotFoundException() throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
-        Mockito.when(pokemonRepository.find(pokemonId)).thenThrow(PokemonNotFoundException.class);
+        Mockito.when(pokemonRepository.find(pokemon.getPokemonId())).thenThrow(PokemonNotFoundException.class);
 
-        assertThrows(PokemonNotFoundException.class, () -> {pokemonFavouriteCountAdder.execute(pokemonId);});
+        assertThrows(PokemonNotFoundException.class, () -> {pokemonFavouriteCountAdder.execute(pokemon.getPokemonId());});
     }
 }

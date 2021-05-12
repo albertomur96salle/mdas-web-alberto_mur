@@ -39,16 +39,12 @@ public class RabbitMqEventManager implements EventManager {
     }
 
     @Override
-    public void publish(Event event) {
-        try {
-            channel.basicPublish(
-                event.exchange,
-                event.getRoutingKey(),
-                null,
-                event.getContent().getBytes(StandardCharsets.UTF_8)
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void publish(Event event) throws IOException {
+        channel.basicPublish(
+            event.exchange,
+            event.getRoutingKey(),
+            null,
+            event.getContent().getBytes(StandardCharsets.UTF_8)
+        );
     }
 }

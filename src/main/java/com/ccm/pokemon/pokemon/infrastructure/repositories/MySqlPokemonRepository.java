@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 @ApplicationScoped
 @Named("MySQL")
 public class MySqlPokemonRepository implements PokemonRepository {
+    private SessionFactory factory;
     private Logger logger = Logger.getLogger(MySqlPokemonRepository.class.getName());
 
     @Inject
@@ -35,9 +36,16 @@ public class MySqlPokemonRepository implements PokemonRepository {
     @Inject
     JsonToPokemonParser jsonToPokemonParser;
 
+    public MySqlPokemonRepository() {
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Pokemon find(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         PokemonDB tmp = session.get(PokemonDB.class, pokemonId.getPokemonId());
 
@@ -93,7 +101,6 @@ public class MySqlPokemonRepository implements PokemonRepository {
 
     @Override
     public void delete(PokemonId pokemonId) {
-        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = null;
 

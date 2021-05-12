@@ -33,9 +33,9 @@ public class UserFinderTest {
 
     @BeforeAll
     public static void setUp() {
-        userId = new UserId(1);
-        userName = new UserName("keko");
-        user = new User(userName, userId);
+        userId = UserIdMother.random();
+        userName = UserNameMother.random();
+        user = UserMother.random();
     }
 
     @BeforeEach

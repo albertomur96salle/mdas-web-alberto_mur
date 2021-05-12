@@ -25,16 +25,12 @@ public class UserSaverTest {
     @Inject
     UserSaver tested;
 
-    static UserId userId;
-    static UserName userName;
     static User user;
     static UserRepository userRepository;
 
     @BeforeAll
     public static void setUp() {
-        userId = new UserId(1);
-        userName = new UserName("keko");
-        user = new User(userName, userId);
+        user = UserMother.random();
     }
 
     @BeforeEach
