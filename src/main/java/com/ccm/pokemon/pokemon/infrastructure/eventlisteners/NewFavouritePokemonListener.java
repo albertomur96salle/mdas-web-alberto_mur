@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
-@Startup
+//@Startup
 @ApplicationScoped
 public class NewFavouritePokemonListener {
     @Inject

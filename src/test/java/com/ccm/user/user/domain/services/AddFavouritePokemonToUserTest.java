@@ -10,6 +10,8 @@ import com.ccm.user.user.domain.vo.UserId;
 import com.ccm.user.user.domain.vo.UserName;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
@@ -25,19 +27,33 @@ public class AddFavouritePokemonToUserTest {
     @Inject
     AddFavouritePokemonToUser tested;
 
-    @Test
-    public void verify_execute_callsToMethods() throws UserNotFoundException, FavouritePokemonAlreadyExistsException {
-        UserId userId = new UserId(1);
-        UserName userName = new UserName("keko");
-        User user = new User(userName, userId);
-        FavouritePokemonId favouritePokemonId = new FavouritePokemonId(123);
+    static UserId userId;
+    static UserName userName;
+    static User user;
+    static FavouritePokemonId favouritePokemonId;
+    static UserFinder userFinder;
+    static UserSaver userSaver;
 
-        UserFinder userFinder = Mockito.mock(UserFinder.class);
-        UserSaver userSaver = Mockito.mock(UserSaver.class);
-        when(userFinder.findUser(userId)).thenReturn(user);
-        when(userSaver.saveUser(user)).thenReturn(user);
+    @BeforeAll
+    public static void setUp() {
+        userId = new UserId(1);
+        userName = new UserName("keko");
+        user = Mockito.mock(User.class);
+        favouritePokemonId = new FavouritePokemonId(123);
+    }
+
+    @BeforeEach
+    public void setMocks() {
+        userFinder = Mockito.mock(UserFinder.class);
+        userSaver = Mockito.mock(UserSaver.class);
         QuarkusMock.installMockForType(userFinder, UserFinder.class);
         QuarkusMock.installMockForType(userSaver, UserSaver.class);
+    }
+
+    @Test
+    public void verify_execute_callsToMethods() throws UserNotFoundException, FavouritePokemonAlreadyExistsException {
+        when(userFinder.findUser(userId)).thenReturn(user);
+        when(userSaver.saveUser(user)).thenReturn(user);
 
         tested.execute(favouritePokemonId, userId);
         Mockito.verify(userFinder, Mockito.times(1)).findUser(userId);
@@ -46,17 +62,8 @@ public class AddFavouritePokemonToUserTest {
 
     @Test
     public void verify_execute_throwsUserNotFoundException() throws UserNotFoundException {
-        UserId userId = new UserId(1);
-        UserName userName = new UserName("keko");
-        User user = new User(userName, userId);
-        FavouritePokemonId favouritePokemonId = new FavouritePokemonId(123);
-
-        UserFinder userFinder = Mockito.mock(UserFinder.class);
-        UserSaver userSaver = Mockito.mock(UserSaver.class);
         when(userFinder.findUser(userId)).thenThrow(UserNotFoundException.class);
         when(userSaver.saveUser(user)).thenReturn(user);
-        QuarkusMock.installMockForType(userFinder, UserFinder.class);
-        QuarkusMock.installMockForType(userSaver, UserSaver.class);
 
         assertThrows(UserNotFoundException.class, () -> {
             tested.execute(favouritePokemonId, userId);
@@ -65,18 +72,11 @@ public class AddFavouritePokemonToUserTest {
 
     @Test
     public void verify_execute_throwsFavouritePokemonAlreadyExistsException() throws UserNotFoundException, FavouritePokemonAlreadyExistsException {
-        UserId userId = new UserId(1);
-        User user = Mockito.mock(User.class);
-        FavouritePokemonId favouritePokemonId = new FavouritePokemonId(123);
         FavouritePokemon favouritePokemon = new FavouritePokemon(favouritePokemonId);
 
-        UserFinder userFinder = Mockito.mock(UserFinder.class);
-        UserSaver userSaver = Mockito.mock(UserSaver.class);
         doThrow(FavouritePokemonAlreadyExistsException.class).when(user).addFavouritePokemon(favouritePokemon);
         when(userFinder.findUser(userId)).thenReturn(user);
         when(userSaver.saveUser(user)).thenReturn(user);
-        QuarkusMock.installMockForType(userFinder, UserFinder.class);
-        QuarkusMock.installMockForType(userSaver, UserSaver.class);
 
         assertThrows(FavouritePokemonAlreadyExistsException.class, () -> {
             tested.execute(favouritePokemonId, userId);

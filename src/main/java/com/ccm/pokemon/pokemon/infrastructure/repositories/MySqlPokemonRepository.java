@@ -10,7 +10,6 @@ import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonType;
 import com.ccm.pokemon.pokemon.infrastructure.databaseentities.PokemonDB;
 import com.ccm.pokemon.pokemon.domain.interfaces.PokemonRepository;
 import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonId;
-import com.ccm.pokemon.pokemon.infrastructure.eventlisteners.NewFavouritePokemonListener;
 import com.ccm.pokemon.pokemon.infrastructure.externalclients.PokemonApiClient;
 import com.ccm.pokemon.pokemon.infrastructure.parsers.JsonToPokemonParser;
 import org.hibernate.HibernateException;
@@ -23,13 +22,12 @@ import org.json.simple.JSONObject;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @ApplicationScoped
 @Named("MySQL")
 public class MySqlPokemonRepository implements PokemonRepository {
-    public static SessionFactory factory;
+//    public static SessionFactory factory;
     private Logger logger = Logger.getLogger(MySqlPokemonRepository.class.getName());
 
     @Inject
@@ -38,12 +36,9 @@ public class MySqlPokemonRepository implements PokemonRepository {
     @Inject
     JsonToPokemonParser jsonToPokemonParser;
 
-    public MySqlPokemonRepository() {
-        factory = new Configuration().configure().buildSessionFactory();
-    }
-
     @Override
     public Pokemon find(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         PokemonDB tmp = session.get(PokemonDB.class, pokemonId.getPokemonId());
 
@@ -71,6 +66,7 @@ public class MySqlPokemonRepository implements PokemonRepository {
 
     @Override
     public void save(Pokemon pokemon) {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = null;
 
@@ -98,6 +94,7 @@ public class MySqlPokemonRepository implements PokemonRepository {
 
     @Override
     public void delete(PokemonId pokemonId) {
+        SessionFactory factory = new Configuration().configure().buildSessionFactory();
         Session session = factory.openSession();
         Transaction tx = null;
 

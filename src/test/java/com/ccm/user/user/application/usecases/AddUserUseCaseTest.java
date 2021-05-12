@@ -8,6 +8,8 @@ import com.ccm.user.user.domain.vo.UserId;
 import com.ccm.user.user.domain.vo.UserName;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
@@ -25,16 +27,29 @@ public class AddUserUseCaseTest {
     @Inject
     AddUserUseCase tested;
 
+    static UserId userId;
+    static UserName userName;
+    static User user;
+    static UserDTO userDTO;
+    static UserCreator userCreator;
+
+    @BeforeAll
+    public static void setUp() {
+        userId = new UserId(1);
+        userName = new UserName("keko");
+        user = new User(userName, userId);
+        userDTO = new UserDTO("keko", 1);
+    }
+
+    @BeforeEach
+    public void setMocks() {
+        userCreator = Mockito.mock(UserCreator.class);
+        QuarkusMock.installMockForType(userCreator, UserCreator.class);
+    }
+
     @Test
     public void verify_createUser_CallsToMethods() throws UserAlreadyExistsException {
-        UserId userId = new UserId(1);
-        UserName userName = new UserName("keko");
-        User user = new User(userName, userId);
-        UserDTO userDTO = new UserDTO("keko", 1);
-
-        UserCreator userCreator = Mockito.mock(UserCreator.class);
         Mockito.doNothing().when(userCreator).createUser(user);
-        QuarkusMock.installMockForType(userCreator, UserCreator.class);
 
         tested.createUser(userDTO);
 
@@ -43,13 +58,7 @@ public class AddUserUseCaseTest {
 
     @Test
     public void verify_createUser_throwsUserAlreadyExistsException () throws UserAlreadyExistsException {
-        UserId userId = new UserId(1);
-        UserName userName = new UserName("keko");
-        UserDTO userDTO = new UserDTO("keko", 1);
-
-        UserCreator userCreator = Mockito.mock(UserCreator.class);
         Mockito.doThrow(UserAlreadyExistsException.class).when(userCreator).createUser(any());
-        QuarkusMock.installMockForType(userCreator, UserCreator.class);
 
         assertThrows(UserAlreadyExistsException.class, () -> {
             tested.createUser(userDTO);

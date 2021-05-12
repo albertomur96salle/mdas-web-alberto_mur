@@ -10,6 +10,7 @@ import com.ccm.pokemon.pokemon.domain.valueObjects.PokemonId;
 import com.ccm.pokemon.pokemon.infrastructure.repositories.MySqlPokemonRepository;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -23,15 +24,23 @@ public class PokemonFavouriteCountAdderTest {
     @Inject
     PokemonFavouriteCountAdder pokemonFavouriteCountAdder;
 
+    static Pokemon pokemon;
+    static PokemonId pokemonId;
+    static PokemonRepository pokemonRepository;
+
+    @BeforeEach
+    public static void setUp() {
+        pokemon = Mockito.mock(Pokemon.class);
+        pokemonId = Mockito.mock(PokemonId.class);
+        pokemonRepository = Mockito.mock(MySqlPokemonRepository.class);
+        QuarkusMock.installMockForType(pokemonRepository, PokemonRepository.class);
+    }
+
     @Test
     public void shouldIncrementFavouriteCount() throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
-        Pokemon pokemon = Mockito.mock(Pokemon.class);
-
-        PokemonRepository pokemonRepository = Mockito.mock(MySqlPokemonRepository.class);
         Mockito.when(pokemonRepository.find(any())).thenReturn(pokemon);
         pokemon.incrementCounter();
         Mockito.doNothing().when(pokemonRepository).save(pokemon);
-        QuarkusMock.installMockForType(pokemonRepository, PokemonRepository.class);
 
         pokemonFavouriteCountAdder.execute(new PokemonId(1));
 
@@ -41,16 +50,9 @@ public class PokemonFavouriteCountAdderTest {
 
     @Test
     public void shouldThrowPokemonNotFoundException() throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
-        Pokemon pokemon = Mockito.mock(Pokemon.class);
-        PokemonId pokemonId = Mockito.mock(PokemonId.class);
-
-        PokemonRepository pokemonRepository = Mockito.mock(MySqlPokemonRepository.class);
         Mockito.when(pokemonRepository.find(pokemonId)).thenThrow(PokemonNotFoundException.class);
-        pokemon.incrementCounter();
-        Mockito.doNothing().when(pokemonRepository).save(pokemon);
-        QuarkusMock.installMockForType(pokemonRepository, PokemonRepository.class);
+
 
         assertThrows(PokemonNotFoundException.class, () -> {pokemonFavouriteCountAdder.execute(pokemonId);});
-        Mockito.verify(pokemonRepository, Mockito.times(0)).save(pokemon);
     }
 }

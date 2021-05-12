@@ -12,6 +12,8 @@ import com.ccm.user.user.domain.vo.FavouritePokemonId;
 import com.ccm.user.user.domain.vo.UserId;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -27,28 +29,40 @@ public class AddFavouritePokemonUseCaseTest {
     @Inject
     AddFavouritePokemonUseCase tested;
 
-    @Test
-    public void verify_addFavouritePokemon_CallsToMethods() throws UserNotFoundException, FavouritePokemonAlreadyExistsException, IOException {
-        FavouritePokemonId pokemonId = new FavouritePokemonId(123);
-        UserId userId = new UserId(1);
-        UserFavouritePokemonDTO userFavouritePokemonDTO = new UserFavouritePokemonDTO(
-            pokemonId.getPokemonId(),
-            userId.getUserId()
+    static FavouritePokemonId pokemonId;
+    static UserId userId;
+    static UserFavouritePokemonDTO userFavouritePokemonDTO;
+    static Event newFavouritePokemonEvent;
+    static AddFavouritePokemonToUser addFavouritePokemonToUser;
+    static EventPublisher eventPublisher;
+
+    @BeforeAll
+    public static void setUp() {
+        pokemonId = new FavouritePokemonId(123);
+        userId = new UserId(1);
+        userFavouritePokemonDTO = new UserFavouritePokemonDTO(
+                pokemonId.getPokemonId(),
+                userId.getUserId()
         );
-        Event newFavouritePokemonEvent = new NewFavouritePokemonEvent(
+        newFavouritePokemonEvent = new NewFavouritePokemonEvent(
                 "pokemon",
                 "newFavourite",
                 String.valueOf(pokemonId.getPokemonId())
         );
+    }
 
-        AddFavouritePokemonToUser addFavouritePokemonToUser = Mockito.mock(AddFavouritePokemonToUser.class);
-        EventPublisher eventPublisher = Mockito.mock(EventPublisher.class);
-
-        Mockito.doNothing().when(addFavouritePokemonToUser).execute(pokemonId, userId);
-        Mockito.doNothing().when(eventPublisher).publish(newFavouritePokemonEvent);
-
+    @BeforeEach
+    public void setMocks() {
+        addFavouritePokemonToUser = Mockito.mock(AddFavouritePokemonToUser.class);
+        eventPublisher = Mockito.mock(EventPublisher.class);
         QuarkusMock.installMockForType(addFavouritePokemonToUser, AddFavouritePokemonToUser.class);
         QuarkusMock.installMockForType(eventPublisher, EventPublisher.class);
+    }
+
+    @Test
+    public void verify_addFavouritePokemon_CallsToMethods() throws UserNotFoundException, FavouritePokemonAlreadyExistsException, IOException {
+        Mockito.doNothing().when(addFavouritePokemonToUser).execute(pokemonId, userId);
+        Mockito.doNothing().when(eventPublisher).publish(newFavouritePokemonEvent);
 
         tested.addFavouritePokemon(userFavouritePokemonDTO);
 
@@ -58,26 +72,8 @@ public class AddFavouritePokemonUseCaseTest {
 
     @Test
     public void verify_addFavouritePokemon_throwsUserNotFoundException () throws UserNotFoundException, FavouritePokemonAlreadyExistsException, IOException {
-        FavouritePokemonId pokemonId = new FavouritePokemonId(123);
-        UserId userId = new UserId(1);
-        UserFavouritePokemonDTO userFavouritePokemonDTO = new UserFavouritePokemonDTO(
-                pokemonId.getPokemonId(),
-                userId.getUserId()
-        );
-        Event newFavouritePokemonEvent = new NewFavouritePokemonEvent(
-                "pokemon",
-                "newFavourite",
-                String.valueOf(pokemonId.getPokemonId())
-        );
-
-        AddFavouritePokemonToUser addFavouritePokemonToUser = Mockito.mock(AddFavouritePokemonToUser.class);
-        EventPublisher eventPublisher = Mockito.mock(EventPublisher.class);
-
         Mockito.doThrow(UserNotFoundException.class).when(addFavouritePokemonToUser).execute(pokemonId, userId);
         Mockito.doNothing().when(eventPublisher).publish(newFavouritePokemonEvent);
-
-        QuarkusMock.installMockForType(addFavouritePokemonToUser, AddFavouritePokemonToUser.class);
-        QuarkusMock.installMockForType(eventPublisher, EventPublisher.class);
 
         assertThrows(UserNotFoundException.class, () -> {
             tested.addFavouritePokemon(userFavouritePokemonDTO);
@@ -87,26 +83,8 @@ public class AddFavouritePokemonUseCaseTest {
 
     @Test
     public void verify_addFavouritePokemon_throwsFavouritePokemonAlreadyExistsException () throws UserNotFoundException, FavouritePokemonAlreadyExistsException, IOException {
-        FavouritePokemonId pokemonId = new FavouritePokemonId(123);
-        UserId userId = new UserId(1);
-        UserFavouritePokemonDTO userFavouritePokemonDTO = new UserFavouritePokemonDTO(
-                pokemonId.getPokemonId(),
-                userId.getUserId()
-        );
-        Event newFavouritePokemonEvent = new NewFavouritePokemonEvent(
-                "pokemon",
-                "newFavourite",
-                String.valueOf(pokemonId.getPokemonId())
-        );
-
-        AddFavouritePokemonToUser addFavouritePokemonToUser = Mockito.mock(AddFavouritePokemonToUser.class);
-        EventPublisher eventPublisher = Mockito.mock(EventPublisher.class);
-
         Mockito.doThrow(FavouritePokemonAlreadyExistsException.class).when(addFavouritePokemonToUser).execute(pokemonId, userId);
         Mockito.doNothing().when(eventPublisher).publish(newFavouritePokemonEvent);
-
-        QuarkusMock.installMockForType(addFavouritePokemonToUser, AddFavouritePokemonToUser.class);
-        QuarkusMock.installMockForType(eventPublisher, EventPublisher.class);
 
         assertThrows(FavouritePokemonAlreadyExistsException.class, () -> {
             tested.addFavouritePokemon(userFavouritePokemonDTO);
@@ -116,26 +94,8 @@ public class AddFavouritePokemonUseCaseTest {
 
     @Test
     public void verify_addFavouritePokemon_throwsIOException () throws UserNotFoundException, FavouritePokemonAlreadyExistsException, IOException {
-        FavouritePokemonId pokemonId = new FavouritePokemonId(123);
-        UserId userId = new UserId(1);
-        UserFavouritePokemonDTO userFavouritePokemonDTO = new UserFavouritePokemonDTO(
-                pokemonId.getPokemonId(),
-                userId.getUserId()
-        );
-        Event newFavouritePokemonEvent = new NewFavouritePokemonEvent(
-                "pokemon",
-                "newFavourite",
-                String.valueOf(pokemonId.getPokemonId())
-        );
-
-        AddFavouritePokemonToUser addFavouritePokemonToUser = Mockito.mock(AddFavouritePokemonToUser.class);
-        EventPublisher eventPublisher = Mockito.mock(EventPublisher.class);
-
         Mockito.doNothing().when(addFavouritePokemonToUser).execute(pokemonId, userId);
         Mockito.doThrow(IOException.class).when(eventPublisher).publish(newFavouritePokemonEvent);
-
-        QuarkusMock.installMockForType(addFavouritePokemonToUser, AddFavouritePokemonToUser.class);
-        QuarkusMock.installMockForType(eventPublisher, EventPublisher.class);
 
         assertThrows(IOException.class, () -> {
             tested.addFavouritePokemon(userFavouritePokemonDTO);

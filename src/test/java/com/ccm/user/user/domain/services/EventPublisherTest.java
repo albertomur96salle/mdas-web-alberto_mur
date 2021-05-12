@@ -7,6 +7,8 @@ import com.ccm.user.user.infrastructure.eventsenders.RabbitMqEventManager;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -18,13 +20,23 @@ public class EventPublisherTest {
     @Inject
     EventPublisher eventPublisher;
 
+    static Event event;
+    static EventManager eventManager;
+
+    @BeforeAll
+    public static void setUp() {
+        event = Mockito.mock(NewFavouritePokemonEvent.class);
+    }
+
+    @BeforeEach
+    public void setMocks() {
+        eventManager = Mockito.mock(RabbitMqEventManager.class);
+        QuarkusMock.installMockForType(eventManager, EventManager.class);
+    }
+
     @Test
     public void verify_publish_callsToMethods() throws IOException {
-        Event event = Mockito.mock(NewFavouritePokemonEvent.class);
-        EventManager eventManager = Mockito.mock(RabbitMqEventManager.class);
-
         Mockito.doNothing().when(eventManager).publish(event);
-        QuarkusMock.installMockForType(eventManager, EventManager.class);
 
         eventPublisher.publish(event);
 
@@ -33,11 +45,7 @@ public class EventPublisherTest {
 
     @Test
     public void verify_publish_throwsIOException () throws IOException {
-        Event event = Mockito.mock(NewFavouritePokemonEvent.class);
-        EventManager eventManager = Mockito.mock(RabbitMqEventManager.class);
-
         Mockito.doThrow(IOException.class).when(eventManager).publish(event);
-        QuarkusMock.installMockForType(eventManager, EventManager.class);
 
         Assertions.assertThrows(IOException.class, () -> {eventPublisher.publish(event);});
     }
