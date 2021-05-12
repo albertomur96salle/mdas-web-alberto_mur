@@ -29,7 +29,7 @@ public class PokemonFavouriteCountAdderTest {
     static PokemonRepository pokemonRepository;
 
     @BeforeEach
-    public static void setUp() {
+    public void setUp() {
         pokemon = Mockito.mock(Pokemon.class);
         pokemonId = Mockito.mock(PokemonId.class);
         pokemonRepository = Mockito.mock(MySqlPokemonRepository.class);
@@ -51,7 +51,6 @@ public class PokemonFavouriteCountAdderTest {
     @Test
     public void shouldThrowPokemonNotFoundException() throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
         Mockito.when(pokemonRepository.find(pokemonId)).thenThrow(PokemonNotFoundException.class);
-
 
         assertThrows(PokemonNotFoundException.class, () -> {pokemonFavouriteCountAdder.execute(pokemonId);});
     }

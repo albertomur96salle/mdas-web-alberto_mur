@@ -16,6 +16,16 @@ public class GetPokemonUseCase {
     @Inject
     PokemonFinder pokemonFinder;
 
+    /**
+     * Retrieves a Pokemon (id, name, times, favourite counter) based on the identifier parameter passed
+     *
+     * @param pokemon contains a numeric identifier representing a Pokemon
+     * @return
+     * @throws PokemonNotFoundException
+     * @throws TimeoutException
+     * @throws NetworkConnectionException
+     * @throws UnknownException
+     */
     public Pokemon getPokemonByPokemonId (PokemonDto pokemon) throws PokemonNotFoundException, TimeoutException, NetworkConnectionException, UnknownException {
         return pokemonFinder.findPokemon(new PokemonId(pokemon.getPokemonId()));
     }

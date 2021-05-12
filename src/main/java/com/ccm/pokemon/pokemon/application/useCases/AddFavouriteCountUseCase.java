@@ -17,6 +17,16 @@ public class AddFavouriteCountUseCase {
     @Inject
     PokemonFavouriteCountAdder pokemonFavouriteCountAdder;
 
+    /**
+     * Increments (by 1) the counter associated with the number of times the Pokemon "pokemon" has been
+     * marked as a favourite (for the first time)
+     *
+     * @param pokemon contains a numeric identifier representing a Pokemon
+     * @throws PokemonNotFoundException
+     * @throws TimeoutException
+     * @throws UnknownException
+     * @throws NetworkConnectionException
+     */
     public void addFavouriteCount(PokemonDto pokemon) throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
         pokemonFavouriteCountAdder.execute(new PokemonId(pokemon.getPokemonId()));
     }

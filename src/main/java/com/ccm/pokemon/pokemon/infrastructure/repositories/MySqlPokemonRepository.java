@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 @ApplicationScoped
 @Named("MySQL")
 public class MySqlPokemonRepository implements PokemonRepository {
-//    public static SessionFactory factory;
     private Logger logger = Logger.getLogger(MySqlPokemonRepository.class.getName());
 
     @Inject

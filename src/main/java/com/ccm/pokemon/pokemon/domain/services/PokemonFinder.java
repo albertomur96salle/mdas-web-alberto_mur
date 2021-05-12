@@ -18,6 +18,16 @@ public class PokemonFinder {
     @Named("MySQL")
     PokemonRepository pokemonRepository;
 
+    /**
+     * Uses the MySQL implementation of the PokemonRepository interface to retrieve a Pokemon from the repository
+     *
+     * @param pokemonId represents the Pokemon to be retrieved from the repository
+     * @return
+     * @throws PokemonNotFoundException
+     * @throws NetworkConnectionException
+     * @throws TimeoutException
+     * @throws UnknownException
+     */
     public Pokemon findPokemon(PokemonId pokemonId) throws PokemonNotFoundException, NetworkConnectionException, TimeoutException, UnknownException {
         return pokemonRepository.find(pokemonId);
     }

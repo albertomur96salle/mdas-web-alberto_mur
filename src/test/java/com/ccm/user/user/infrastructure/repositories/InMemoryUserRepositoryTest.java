@@ -7,9 +7,12 @@ import com.ccm.user.user.domain.services.UsersMother;
 import com.ccm.user.user.infrastructure.repositories.InMemoryUserRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +21,23 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 public class InMemoryUserRepositoryTest {
     @Inject
+    @Named("InMemory")
     UserRepository userRepository;
+
+    static User user;
+
+    @BeforeAll
+    public static void setUp() {
+        user = UserMother.random();
+    }
+
+    @BeforeEach
+    public void clearRepo() {
+        userRepository.deleteAll();
+    }
 
     @Test
     public void shouldFindAUserById() {
-        UserRepository userRepository = new InMemoryUserRepository();
-
-        //Given
-        User user = UserMother.random();
-
         //When
         userRepository.create(user);
 
@@ -36,11 +47,7 @@ public class InMemoryUserRepositoryTest {
 
     @Test
     public void shouldCheckIfAUserExistsById() {
-        //Given
-        User user = UserMother.random();
-
         //When
-        userRepository.deleteAll();
         userRepository.create(user);
 
         //Then
@@ -52,7 +59,6 @@ public class InMemoryUserRepositoryTest {
         //Given
         List<User> users = UsersMother.random();
 
-        userRepository.deleteAll();
         //When
         users.forEach(user -> {
             userRepository.create(user);
@@ -68,11 +74,7 @@ public class InMemoryUserRepositoryTest {
 
     @Test
     public void shouldUpdateUser() {
-        //Given
-        User user = UserMother.random();
-
         //When
-        userRepository.deleteAll();
         userRepository.create(user);
         User sameUserDifferentName = UserMother.randomWithCustomId(user.getUserId());
         userRepository.update(sameUserDifferentName);
@@ -83,11 +85,7 @@ public class InMemoryUserRepositoryTest {
 
     @Test
     public void shouldCreateUser() {
-        //Given
-        User user = UserMother.random();
-
         //When
-        userRepository.deleteAll();
         userRepository.create(user);
 
         //Then
@@ -97,11 +95,7 @@ public class InMemoryUserRepositoryTest {
 
     @Test
     public void shouldDeleteUser() {
-        //Given
-        User user = UserMother.random();
-
         //When
-        userRepository.deleteAll();
         userRepository.create(user);
 
         //Then

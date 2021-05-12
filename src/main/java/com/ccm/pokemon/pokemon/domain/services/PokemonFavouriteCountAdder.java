@@ -19,6 +19,16 @@ public class PokemonFavouriteCountAdder {
     @Named("MySQL")
     PokemonRepository pokemonRepository;
 
+    /**
+     * Uses the MySQL implementation of the PokemonRepository interface to retrieve a Pokemon from the repository and
+     * increments its favourite counter before (by 1) persisting the Pokemon again
+     *
+     * @param pokemonId represents the Pokemon whose favourite counter is going to be incremented by 1
+     * @throws PokemonNotFoundException
+     * @throws TimeoutException
+     * @throws UnknownException
+     * @throws NetworkConnectionException
+     */
     public void execute(PokemonId pokemonId) throws PokemonNotFoundException, TimeoutException, UnknownException, NetworkConnectionException {
         Pokemon pokemon = pokemonRepository.find(pokemonId);
         pokemon.incrementCounter();

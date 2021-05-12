@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
-//@Startup
+@Startup
 @ApplicationScoped
 public class NewFavouritePokemonListener {
     @Inject
@@ -46,7 +46,7 @@ public class NewFavouritePokemonListener {
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "UTF-8");
                 try {
-                    logger.log(Level.INFO, "Someone added the Pokémon with ID " + message + " as favourite");
+                    logger.log(Level.INFO, "Someone added the Pokemon with ID " + message + " as favourite");
                     addFavouriteCountUseCase.addFavouriteCount(new PokemonDto(Integer.parseInt(message)));
                 } catch (PokemonNotFoundException | com.ccm.pokemon.pokemon.domain.exceptions.TimeoutException |
                         NetworkConnectionException | UnknownException e) {

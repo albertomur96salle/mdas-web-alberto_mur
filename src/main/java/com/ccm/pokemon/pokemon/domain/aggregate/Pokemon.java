@@ -5,6 +5,10 @@ import com.ccm.pokemon.pokemon.domain.valueObjects.*;
 import java.util.Objects;
 
 public class Pokemon {
+    private Name name;
+    private PokemonId pokemonId;
+    private PokemonTypes pokemonTypes;
+    private FavouriteCounter favouriteCounter;
 
     public Pokemon(PokemonId pokemonId, Name name) {
         this.name = name;
@@ -29,14 +33,10 @@ public class Pokemon {
         return favouriteCounter;
     }
 
-    private Name name;
-    private PokemonId pokemonId;
-    private PokemonTypes pokemonTypes;
-    private FavouriteCounter favouriteCounter;
-
     public void addPokemonType(PokemonType pokemonType) {
         this.pokemonTypes.addType(pokemonType);
     }
+
     public void incrementCounter() {
         this.favouriteCounter.incrementCounter();
     }

@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @QuarkusTest
 public class PokemonApiClientTest {
     @Inject
@@ -38,5 +40,14 @@ public class PokemonApiClientTest {
         Assertions.assertEquals(pokemon.getName().getName(), "bulbasaur");
         Assertions.assertEquals(pokemon.getPokemonTypes(), types);
         Assertions.assertEquals(pokemon.getFavouriteCounter().getFavouriteCounter(), 0);
+    }
+
+    @Test
+    public void shouldNotFindPokemon() {
+        //Given
+        PokemonId pokemonId = new PokemonId(0);
+
+        //When+Then
+        assertThrows(PokemonNotFoundException.class, () -> {pokemonApiClient.find(pokemonId);});
     }
 }
