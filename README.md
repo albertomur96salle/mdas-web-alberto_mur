@@ -27,6 +27,8 @@ Se puede parar de dos formas distintas:
 
 * Primer método: en cada una de las terminales anteriores pulsar la combinación de teclas CTRL+C (las propias terminales mostrarán un
    mensaje que indicará que se están parando los diferentes servicios)
+    * Primero parar la terminal que tiene corriendo la aplicación
+    * Después parar la terminar que tiene corriendo la infraestructura
    
 * Segundo método: en otra terminal distinta a las anteriores, ejecutar los siguientes comandos (en este orden)
     * `docker-compose -f app.yml down`
@@ -35,9 +37,9 @@ Se puede parar de dos formas distintas:
 ## Probar la aplicación
 
 Se describe a continuación un flujo de ejecución para probar la aplicación:
-1) Crear un usuario `curl "http://172.0.0.4:8081/user/addUser?name=testUser&userId=1"`
-2) Añadir un Pokémon como favorito del usuario anterior `curl -H "id:1" "http://172.0.0.4:8081/user/addFavouritePokemon?id=1"`
-3) Consultar la información del Pokémon anteriormente añadido como favorito `curl "http://172.0.0.4:8081/pokemon/get/1"`
+1) Crear un usuario `curl -v -X POST "http://172.0.0.4:8081/user/addUser?name=testUser&userId=1"`
+2) Añadir un Pokémon como favorito del usuario anterior `curl -v -X PUT -H "id:1" "http://172.0.0.4:8081/user/addFavouritePokemon?id=1"`
+3) Consultar la información del Pokémon anteriormente añadido como favorito `curl -v "http://172.0.0.4:8081/pokemon/1"`
 
 ## Ejecutar los test
 
