@@ -11,6 +11,15 @@ La infraestructura (persistencia y sistema de colas) también han sido puestas e
 * Comprobar los permisos del fichero gradlew (este fichero se encuentra en la raíz del proyecto, y es lo que se emplea para lanzar la aplicación).
   Es muy probable que la terminal muestre que no tenemos permisos para ejecutarlo, por lo que habrá que cambiarlos mediante `chmod u+x gradlew`
 * Tener `curl` instalado
+* Tener libres los siguientes puertos:
+    * 8081
+    * 3306
+    * 5672
+    * 15672
+* Tener libres las siguientes direcciones IP:
+    * 172.0.0.2
+    * 172.0.0.3
+    * 172.0.0.4
   
 ## Puesta en marcha
 
