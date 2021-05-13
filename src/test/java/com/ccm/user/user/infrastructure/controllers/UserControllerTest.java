@@ -16,7 +16,7 @@ public class UserControllerTest {
         given()
             .queryParam("name", "tipoDeIncógnito")
             .queryParam("userId", 123456789)
-            .get("/user/addUser")
+            .post("/user/addUser")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK);
@@ -27,12 +27,12 @@ public class UserControllerTest {
         given()
             .queryParam("name", "tipoDeIncógnito")
             .queryParam("userId", 1)
-            .get("/user/addUser");
+            .post("/user/addUser");
 
         given()
             .queryParam("name", "tipoDeIncógnito")
             .queryParam("userId", 1)
-            .get("/user/addUser")
+            .post("/user/addUser")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_FORBIDDEN);
@@ -43,12 +43,12 @@ public class UserControllerTest {
         given()
             .queryParam("name", "tipoDeIncógnito")
             .queryParam("userId", 1)
-            .get("/user/addUser");
+            .post("/user/addUser");
 
         given()
             .header("id", 1)
             .queryParam("id", 1234)
-            .get("/user/addFavouritePokemon")
+            .put("/user/addFavouritePokemon")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK);
@@ -59,17 +59,17 @@ public class UserControllerTest {
         given()
             .queryParam("name", "tipoDeIncógnito")
             .queryParam("userId", 1)
-            .get("/user/addUser");
+            .post("/user/addUser");
 
         given()
             .header("id", 1)
             .queryParam("id", 123)
-            .get("/user/addFavouritePokemon");
+            .put("/user/addFavouritePokemon");
 
         given()
             .header("id", 1)
             .queryParam("id", 123)
-            .get("/user/addFavouritePokemon")
+            .put("/user/addFavouritePokemon")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_CONFLICT);
@@ -80,7 +80,7 @@ public class UserControllerTest {
         given()
             .header("id", 9)
             .queryParam("id", 123)
-            .get("/user/addFavouritePokemon")
+            .put("/user/addFavouritePokemon")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_FORBIDDEN);

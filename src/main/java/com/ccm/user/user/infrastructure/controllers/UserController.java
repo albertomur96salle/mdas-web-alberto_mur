@@ -1,9 +1,9 @@
 package com.ccm.user.user.infrastructure.controllers;
 
-import com.ccm.user.user.application.usecases.AddFavouritePokemonUseCase;
-import com.ccm.user.user.application.usecases.AddUserUseCase;
 import com.ccm.user.user.application.dto.UserDTO;
 import com.ccm.user.user.application.dto.UserFavouritePokemonDTO;
+import com.ccm.user.user.application.usecases.AddFavouritePokemonUseCase;
+import com.ccm.user.user.application.usecases.AddUserUseCase;
 import com.ccm.user.user.domain.exceptions.FavouritePokemonAlreadyExistsException;
 import com.ccm.user.user.domain.exceptions.UserAlreadyExistsException;
 import com.ccm.user.user.domain.exceptions.UserNotFoundException;
@@ -27,7 +27,7 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class.getName());
 
-    @GET
+    @PUT
     @Path("/addFavouritePokemon")
     public Response addFavouritePokemon(@HeaderParam ("id") int userId, @QueryParam("id") int pokemonId) {
         try {
@@ -45,7 +45,7 @@ public class UserController {
         }
     }
 
-    @GET
+    @POST
     @Path("/addUser")
     public Response addUser(@QueryParam("name") String name, @QueryParam("userId") int userId) {
         try {

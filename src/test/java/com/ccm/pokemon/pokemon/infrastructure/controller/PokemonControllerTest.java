@@ -14,7 +14,7 @@ public class PokemonControllerTest {
     public void shouldGetPokemon() {
         Response r = given()
             .pathParam("id", 1)
-            .get("/pokemon/get/{id}")
+            .get("/pokemon/{id}")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
@@ -29,7 +29,7 @@ public class PokemonControllerTest {
     public void shouldNotGetPokemon() {
         given()
             .pathParam("id", 0)
-            .get("/pokemon/get/{id}")
+            .get("/pokemon/{id}")
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_NOT_FOUND);
