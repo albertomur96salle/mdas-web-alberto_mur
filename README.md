@@ -1,8 +1,12 @@
 # Entrega final
 
+La aplicación ha sido puesta en un contenedor de Docker para facilitar su puesta en marcha.  
+La infraestructura (persistencia y sistema de colas) también han sido puestas en un contenedor de Docker.
+
 ## Pre-requisitos
 
-* Tener Docker instalado
+* Tener conexión a internet
+* Tener Docker instalado (comprobar que docker-compose funciona)
 * Es recomendable tener abiertas 2 terminales distintas para la ejecución de los comandos de puesta en marca
 * Comprobar los permisos del fichero gradlew (este fichero se encuentra en la raíz del proyecto, y es lo que se emplea para lanzar la aplicación).
   Es muy probable que la terminal muestre que no tenemos permisos para ejecutarlo, por lo que habrá que cambiarlos mediante `chmod u+x gradlew`
@@ -10,10 +14,10 @@
   
 ## Puesta en marcha
 
-1) En una terminal ejecutar `docker-compose -f docker-compose.yml up`.  
+1) En una terminal ejecutar `docker-compose -f infrastructure.yml up`.  
    Esto pondrá en marcha la infraestructura necesaria para el proyecto 
-2) En otra terminal distinta ejecutar `docker-compose -f docker-compose-app.yml up`.   
-   Esto pondrá en marcha el proyecto completo
+2) En otra terminal distinta ejecutar `docker-compose -f app.yml up`.   
+   Esto pondrá en marcha el proyecto completo  
    Los diferentes servicios que se ponen en marcha dejan la terminal ocupada con la salida que van mostrando, por eso es
    mejor tener dos terminales abiertas antes de empezar
 
@@ -25,8 +29,8 @@ Se puede parar de dos formas distintas:
    mensaje que indicará que se están parando los diferentes servicios)
    
 * Segundo método: en otra terminal distinta a las anteriores, ejecutar los siguientes comandos (en este orden)
-    * `docker-compose -f docker-compose-app.yml down`
-    * `docker-compose -f docker-compose.yml down`
+    * `docker-compose -f app.yml down`
+    * `docker-compose -f infrastructure.yml down`
 
 ## Probar la aplicación
 
